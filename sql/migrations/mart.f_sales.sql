@@ -9,7 +9,7 @@ insert into mart.f_sales
         dc.date_id, 
         item_id, customer_id, 
         city_id, quantity, 
-        case when status = 'refunded' then payment_amount - (payment_amount * 2) else payment_amount end payment_amount, 
+        case when status = 'refunded' then payment_amount * -1 else payment_amount end payment_amount, 
         case when status = 'refunded' then 'shipped' else status end status
     from staging.user_order_log uol
     left join mart.d_calendar as dc on 
