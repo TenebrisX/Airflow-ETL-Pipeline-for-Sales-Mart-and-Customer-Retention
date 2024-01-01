@@ -372,8 +372,8 @@ with DAG(
         sql="sql/mart.f_customer_retention.sql",
         parameters={"date": {business_dt}})  # PostgreSQLOperator to execute SQL script for updating f_customer_retention table with parameters
 
-    # Task dependencies using bitshift and set_downstream
+    # Task dependencies using bitshift
     generate_report >> get_report >> get_increment
     get_increment >> [upload_user_order_log_inc, upload_customer_research_inc, upload_user_activity_log_inc]
-    upload_user_activity_log_inc.set_downstream([update_d_item_table, update_d_city_table, update_d_customer_table])
-    update_d_customer_table >> [update_f_sales, update_f_customer_retention]
+    upload_user_activity_log_inc >> update_d_city_table >> [update_d_item_table, update_d_customer_table]
+    update_d_customer_table >> update_f_sales >> update_f_customer_retention
