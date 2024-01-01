@@ -258,7 +258,7 @@ def upload_data_to_staging(filename, date, pg_table, pg_schema, ti):
 
     except UniqueViolation:
         print('Record with uniq_id already exists. Skipping the task.')
-        
+
 
 def clean_or_replace_data(pg_table, start_date, end_date):
     """
@@ -280,7 +280,7 @@ def clean_or_replace_data(pg_table, start_date, end_date):
     Example usage:
     clean_or_replace_data('my_table', '2023-01-01', '2023-01-31')
     """
-    sql_script = f"delete from {pg_table} where date_time between '{start_date}' and '{end_date}';"
+    sql_script = f"delete from staging.{pg_table} where date_time between '{start_date}' and '{end_date}';"
 
      # Create a PostgresHook to connect to the PostgreSQL database
     postgres_hook = PostgresHook(postgres_conn_id) # Create a PostgresHook
@@ -304,7 +304,7 @@ business_dt = '{{ ds }}'
 
 # DAG named 'sales_mart'
 with DAG(
-        'sales_mart',
+        'sales_mart_and_customer_retention',
         default_args=args,
         description='Provide default dag for sprint3',
         catchup=True,

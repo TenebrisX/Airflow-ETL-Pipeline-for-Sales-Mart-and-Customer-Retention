@@ -86,7 +86,7 @@ def get_report(ti):
     task_id = ti.xcom_pull(key='task_id')
     report_id = None
 
-    for _ in range(20):
+    for i in range(20):
         response = make_request(ti, f'{base_url}/get_report', method='GET', params={'task_id': task_id})
         status = json.loads(response.content)['status']
 
@@ -114,10 +114,8 @@ def upload_from_s3(ti, file_names):
     Returns:
         None
     """
-    response = requests.get(
-        f'{base_url}upload_from_s3/?report_id={report_id}&date={str(date)}T00:00:00',
-        headers = headers
-    )
+    response = make_request(ti, f'{base_url}upload_from_s3/?report_id={report_id}&date={str(date)}T00:00:00',
+                            headers=headers)
     response.raise_for_status()
 
     source_path = 'https://storage.yandexcloud.net/s3-sprint3/cohort_21/kotlyarov-bar/project/TWpBeU15MHhNaTB5T0ZRd056b3lOem96TkFscmIzUnNlV0Z5YjNZdFltRnk=/'
@@ -132,7 +130,6 @@ def upload_from_s3(ti, file_names):
             df = pd.read_csv(os.path.join(source_path, s), sep=',')
             df.to_csv(dest_file_path, index=False)
             print(f"File '{s}' imported successfully.")
-
 
 # Function to upload data to staging in PostgreSQL
 def upload_data_to_staging(ti, filename, pg_table, pg_schema):
@@ -188,13 +185,13 @@ get_report = PythonOperator(
     provide_context=True,  # Indicates that the function should receive the 'ti' parameter
     dag=dag)
 
-t_upload_from_s3 = PythonOperator(task_id='upload_from_s3',
-                                  python_callable=upload_from_s3,
-                                  provide_context=True,  # Indicates that the function should receive the 'ti' parameter
-                                  op_kwargs={'file_names': ['customer_research.csv', 'user_activity_log.csv',
-                                                           'user_order_log.csv', 'price_log.csv']
-                                             },
-                                  dag=dag)
+t_upload_from_s3 = PythonOperator(
+    task_id='upload_from_s3',
+    python_callable=upload_from_s3,
+    provide_context=True,  # Indicates that the function should receive the 'ti' parameter
+    op_kwargs={'file_names': ['customer_research.csv', 'user_activity_log.csv',
+             'user_order_log.csv', 'price_log.csv']},
+    dag=dag)
 
 # Define tasks for uploading data to staging
 tables_to_staging = ['customer_research', 'user_activity_log', 'user_order_log', 'price_log']
