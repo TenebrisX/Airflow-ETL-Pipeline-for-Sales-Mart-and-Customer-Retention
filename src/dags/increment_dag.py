@@ -27,10 +27,6 @@ postgres_conn_id = 'postgresql_de'  # PostgreSQL connection ID
 nickname = 'kotlyarov-bar'  # User nickname
 cohort = '21'  # Cohort number
 
-# Airflow template variables {{ ds }} and {{ tomorrow_ds }} for the business date range
-start_date = '{{ ds }}'
-end_date = '{{ tomorrow_ds }}'
-
 # Define headers for API requests
 headers = {
     'X-Nickname': nickname,
@@ -287,7 +283,6 @@ def clean_or_replace_data(pg_table, start_date, end_date):
     engine = postgres_hook.get_sqlalchemy_engine() # Get SQLAlchemy engine
     with engine.connect() as connection:
         connection.execute(sql_script) # Execute sql_script
-
 
 
 # Default arguments for the DAG
