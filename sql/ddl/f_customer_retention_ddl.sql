@@ -1,6 +1,9 @@
 --drop
 drop table if exists mart.f_customer_retention;
 
+--delete
+delete from mart.f_customer_retention;
+
 
 -- f_customer_retention creation
 create table if not exists mart.f_customer_retention (

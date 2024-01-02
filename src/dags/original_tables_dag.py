@@ -1,9 +1,11 @@
 import time
 import requests
 import json
-import pandas as pd
-from datetime import datetime, timedelta
 import os
+from datetime import datetime, timedelta
+
+import pandas as pd
+
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
