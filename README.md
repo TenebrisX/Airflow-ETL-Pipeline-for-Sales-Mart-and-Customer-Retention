@@ -10,7 +10,7 @@ This repository contains the code for an Apache Airflow ETL pipeline designed to
 
 ## File Structure
 
-- `/airflow_dags`
+- `src/dags`
   - `increment_dag.py`
   - `original_tables_dag.py`
 - `/sql`
