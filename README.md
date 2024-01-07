@@ -1,33 +1,48 @@
-# Проект 3-го спринта
+# Airflow ETL Pipeline for Sales Mart and Customer Retention
 
-### Описание
-Репозиторий предназначен для сдачи проекта 3-го спринта
+## Table of Contents
+- [Overview](#overview)
+- [File Structure](#file-structure)
+- [DAG Description](#dag-description)
 
-### Как работать с репозиторием
-1. В вашем GitHub-аккаунте автоматически создастся репозиторий `de-project-sprint-3` после того, как вы привяжете свой GitHub-аккаунт на Платформе.
-2. Скопируйте репозиторий на свой локальный компьютер, в качестве пароля укажите ваш `Access Token` (получить нужно на странице [Personal Access Tokens](https://github.com/settings/tokens)):
-	* `git clone https://github.com/{{ username }}/de-project-sprint-3.git`
-3. Перейдите в директорию с проектом: 
-	* `cd de-project-sprint-3`
-4. Выполните проект и сохраните получившийся код в локальном репозитории:
-	* `git add .`
-	* `git commit -m 'my best commit'`
-5. Обновите репозиторий в вашем GutHub-аккаунте:
-	* `git push origin main`
+## Overview
+This repository contains the code for an Apache Airflow ETL pipeline designed to manage the update process for tables in a sales data mart and compute customer retention metrics. The pipeline engages with an external API for report generation and retrieval, handles file uploads from S3, and executes data transformations to update both staging and mart tables.
 
-### Структура репозитория
-1. Папка `migrations` хранит файлы миграции. Файлы миграции должны быть с расширением `.sql` и содержать SQL-скрипт обновления базы данных.
-2. В папке `src` хранятся все необходимые исходники: 
-    * Папка `dags` содержит DAG's Airflow.
+## File Structure
 
-### Как запустить контейнер
-Запустите локально команду:
+- `/airflow_dags`
+  - `increment_dag.py`
+  - `original_tables_dag.py`
+- `/sql`
+  - `mart.d_city.sql`
+  - `mart.d_customer.sql`
+  - `mart.d_item.sql`
+  - `mart.f_customer_retention.sql`
+  - `mart.f_sales.sql`
 
-```
-docker run -d --rm -p 3000:3000 -p 15432:5432 --name=de-project-sprint-3-server cr.yandex/crp1r8pht0n0gl25aug1/project-sprint-3:latest
-```
 
-После того как запустится контейнер, у вас будут доступны:
-1. Visual Studio Code
-2. Airflow
-3. Database
+## DAG Description
+The main Airflow DAG file is `increment_dag.py`. The DAG consists of the following tasks:
+
+1. **generate_report:** Initiates the generation of a report via a POST request and pushes the resulting task_id to XCom.
+
+2. **get_report:** Retrieves a report_id from an API endpoint and pushes it to XCom.
+
+3. **get_increment:** Retrieves an increment_id from an API endpoint and pushes it to XCom.
+
+4. **upload_user_order_log_inc:** Uploads data from an S3 file to a PostgreSQL table in a staging environment for the 'user_order_log' table.
+
+5. **upload_customer_research_inc:** Uploads data from an S3 file to a PostgreSQL table in a staging environment for the 'customer_research' table.
+
+6. **upload_user_activity_log_inc:** Uploads data from an S3 file to a PostgreSQL table in a staging environment for the 'user_activity_log' table.
+
+7. **update_d_city_table:** Executes SQL script for updating the 'd_city' table.
+
+8. **update_d_item_table:** Executes SQL script for updating the 'd_item' table.
+
+9. **update_d_customer_table:** Executes SQL script for updating the 'd_customer' table.
+
+10. **update_f_sales:** Executes SQL script for updating the 'f_sales' table.
+
+11. **update_f_customer_retention:** Executes SQL script for updating the 'f_customer_retention' table.
+
