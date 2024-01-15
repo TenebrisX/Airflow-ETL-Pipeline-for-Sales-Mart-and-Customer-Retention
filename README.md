@@ -53,11 +53,11 @@ The `original_tables_dag.py` DAG file orchestrates tasks to handle the initial l
 
 ### Original Tables DAG Schema:
 
-![](https://github.com/TenebrisX/de-project-sprint-2/blob/main/old_schema.png)
+![](https://github.com/TenebrisX/Airflow-ETL-Pipeline-for-Sales-Mart-and-Customer-Retention/blob/main/images/original_tables_schema.png)
 
 
 ### Sourse Tables DAG
-## Same as the Original Tables DAG but with extra steps for data quality check
+#### Same as the Original Tables DAG but with extra steps for data quality check
 
 The `sourse_tables_dag.py` DAG file orchestrates tasks to handle the initial load of data into the data mart. It performs the following tasks:
 
@@ -86,7 +86,7 @@ The `sourse_tables_dag.py` DAG file orchestrates tasks to handle the initial loa
 
 ### Sourse Tables DAG Schema:
 
-![](https://github.com/TenebrisX/de-project-sprint-2/blob/main/old_schema.png)
+![](https://github.com/TenebrisX/Airflow-ETL-Pipeline-for-Sales-Mart-and-Customer-Retention/blob/main/images/sourse_tables_schema.png)
 
 
 ### Increment DAG
