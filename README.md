@@ -15,7 +15,7 @@ This repository contains Apache Airflow DAGs for ETL pipelines designed to manag
 
 - `/src/dags`
   - `original_tables_dag.py`
-  - `sourse_tables_dag.py`
+  - `source_tables_dag.py`
   - `increment_dag.py`
 - `/sql`
 	- `migrations`
